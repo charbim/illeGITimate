@@ -100,10 +100,10 @@ public class IlleGITimate {
      */
 
     // TODO: put a try-catch here?
-    public void commitFile(File file) throws IOException {
+    public void stageFile(File file) throws IOException {
 
         if (!file.exists()) {
-            System.out.println("File does not exist; cannot commit");
+            System.out.println("File does not exist; cannot stage");
             return;
         }
 

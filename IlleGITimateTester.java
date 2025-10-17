@@ -1,3 +1,4 @@
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -73,7 +74,7 @@ public class IlleGITimateTester {
         }
 
         for (File file : files) {
-            test.commitFile(file);
+            test.stageFile(file);
         }
 
         // (1) Checks if the right number of files were put in objects directory
@@ -145,7 +146,7 @@ public class IlleGITimateTester {
 
     public static void testClearingRepository(IlleGITimate test) throws IOException {
         File a = new File("testTextFiles" + File.separator + "a.txt");
-        test.commitFile(a);
+        test.stageFile(a);
         test.clearRepository();
         if (test.getIndex().getNumberOfEntries() == 0 && test.getObjects().listFiles().length == 0) {
             System.out.println(GB + "Passed || (1) testClearingRepository" + RESET_COLOR);
@@ -177,7 +178,7 @@ public class IlleGITimateTester {
         }
 
         for (File file : files) {
-            test.commitFile(file);
+            test.stageFile(file);
         }
 
         // (1) Checks if the right number of files were put in objects directory
@@ -262,7 +263,7 @@ public class IlleGITimateTester {
         }
 
         for (File file : files) {
-            test.commitFile(file);
+            test.stageFile(file);
         }
 
         // (1) Checks if the right number of files were put in objects directory
@@ -330,7 +331,7 @@ public class IlleGITimateTester {
                 test.clearRepository();
 
                 for (File file : files) {
-                    test.commitFile(file);
+                    test.stageFile(file);
                 }
             }
 
@@ -346,7 +347,7 @@ public class IlleGITimateTester {
         File nonexistentFile = new File("thisisnotafile");
 
         try {
-            test.commitFile(nonexistentFile);
+            test.stageFile(nonexistentFile);
             System.out.println(GB + "Passed || (1) testCommittingNonexistentFile" + RESET_COLOR);
         } catch (Exception e) {
             System.out.println(RB + "Failed || (1) testCommittingNonexistentFile" + RESET_COLOR);
@@ -376,4 +377,32 @@ public class IlleGITimateTester {
 
         test.createRepository();
     }
+
+    /*
+     * File Structure as followed (ALL FILES STORED IN *testFilesForCommit*):
+     * a/
+     *  -aa/
+     *  -a1.txt --> this
+     *  - aa1/
+     *      - a2.txt --> assignment
+     * b/
+     *  -bb/
+     *      -bbb/
+     *          -b1.txt --> sucks
+     * c.txt --> boo
+     */
+    public static void testFileCreationForCommit(IlleGITimate test) throws IOException {
+        test.clearRepository();
+        String parentName = "testFileCreationForCommit/";
+        String[] filePaths = {"a/a1.txt", "a/aa1/a2.txt", "b/bb/bbb/b1.txt", "c.txt"};
+
+        for (String path : filePaths) {
+            File f = new File(parentName + path);
+            test.stageFile(f);
+        }
+
+        TreeBuilder tb = new TreeBuilder(new File("."), test.getIndex());
+
+    }
+
 }
