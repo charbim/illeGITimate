@@ -8,6 +8,7 @@ import java.io.IOException;
 public class Head {
     
     private File HEAD;
+    private String contents;
     
     public Head(String pathname) throws IOException {
         initializePath(pathname);
@@ -41,9 +42,18 @@ public class Head {
     }
 
     public void update(String commitHash) throws IOException {
-        BufferedWriter bw = new BufferedWriter(new FileWriter("git/HEAD", false));
+        BufferedWriter bw = new BufferedWriter(new FileWriter(HEAD, false));
         bw.write(commitHash);
         bw.close();
+        setContents(commitHash);
+    }
+
+    public void setContents(String contents) {
+        this.contents = contents;
+    }
+
+    public String getContents() {
+        return contents;
     }
 
 }
