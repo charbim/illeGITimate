@@ -1,6 +1,10 @@
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Scanner;
+import java.util.Date;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -118,6 +122,78 @@ public class IlleGITimate {
         // Cases 2, 3, 4:
         index.addFile(file);
         objects.addFile(file);
+    }
+
+
+    public void commitFile(String author, String message) throws IOException {
+        String contents = buildCommitInfoString(author, message);
+        String hash = generateSha1Hex(createInfoFile("commit", contents));
+        File f = createInfoFile(hash, contents);
+        String commitHash = objects.addFile(f);
+        HEAD.update(commitHash);
+    }
+
+    // inconvience. wow. very annoying. darn you previous people.
+    public File createInfoFile(String name, String contents) throws IOException {
+        File f = new File(name);
+        BufferedWriter bw = new BufferedWriter(new FileWriter(f, true));
+        bw.write(contents);
+        bw.close();
+        return f;
+    }
+
+    // creates a string containing the contents of our commit file
+    public String buildCommitInfoString(String author, String message) {
+
+        // TITLE FILL OUT
+        // 2D array w/commit info (bc hashmap has no guarentee info stored in correct order)
+        // Columns --> each data type
+        // Rows --> [0]: Titles; [1]: Info;
+        String[][] commitInfo = new String[2][5];
+        String[] infoType = new String[]{"tree", "parent", "author", "date", "message"};
+        for (int i = 0; i < 5; i++) {
+            commitInfo[0][i] = infoType[i];
+        }
+
+        // INFO ADD
+        commitInfo[1][0] = // find tree;
+        commitInfo[1][1] = HEAD.getContents();
+        commitInfo[1][2] = author;
+        commitInfo[1][3] = (new Date()).toString();
+        commitInfo[1][4] = message;
+
+        // Write into SB
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 5; i++) {
+            sb.append(commitInfo[0][i] + ": " + commitInfo[1][i]);
+            if (i != 4) {
+                sb.append("\n");
+            }
+        }
+
+        return sb.toString();
+        
+    }
+
+    // Takes user typing inputs and creates a new commit based on that information.
+    public void inputCommitInfo() throws IOException {
+        // return string with data formatted as so: [Author, Message]
+        String[] userInfo = new String[2];
+
+        // Username
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter author name: ");
+        userInfo[0] = sc.nextLine();
+
+        // Message
+        System.out.println("Enter Commit Summary: ");
+        userInfo[1] = sc.nextLine();
+        while (sc.hasNext()) {
+            userInfo[1] += sc.nextLine();
+        }
+
+        sc.close();
+        commitFile(userInfo[0], userInfo[1]);
     }
 
     /*
