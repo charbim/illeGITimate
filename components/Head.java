@@ -1,6 +1,8 @@
 package components;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 public class Head {
@@ -36,6 +38,12 @@ public class Head {
 
     public boolean delete() {
         return HEAD.delete();
+    }
+
+    public void update(String commitHash) throws IOException {
+        BufferedWriter bw = new BufferedWriter(new FileWriter("git/HEAD", false));
+        bw.write(commitHash);
+        bw.close();
     }
 
 }
