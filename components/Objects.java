@@ -49,8 +49,9 @@ public class Objects {
 
     /*
      * This generates the BLOB and puts it in git/objects/
+     * returns hash
      */
-    public void addFile(File file) throws IOException {
+    public String addFile(File file) throws IOException {
         String hash = generateSha1Hex(file);
         File objectsFile = new File(objects.getPath() + File.separator + hash);
 
@@ -61,6 +62,7 @@ public class Objects {
         FileOutputStream fos = new FileOutputStream(objectsFile);
         Files.copy(file.toPath(), fos);
         fos.close();
+        return hash;
     }
 
     /*
