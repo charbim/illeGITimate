@@ -1,4 +1,4 @@
-import java.io.BufferedWriter;
+package functions;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -401,7 +401,7 @@ public class IlleGITimateTester {
             test.stageFile(f);
         }
 
-        TreeBuilder tb = new TreeBuilder(new File("."), test.getIndex());
+        // TreeBuilder tb = new TreeBuilder(new File("."), test.getIndex());
 
     }
 

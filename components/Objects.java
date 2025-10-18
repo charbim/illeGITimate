@@ -43,7 +43,7 @@ public class Objects {
      * Using apache library, which is gitignored. If this is not working for
      * someone, download the jar files from Google
      */
-    private String generateSha1Hex(File file) throws IOException {
+    public String generateSha1Hex(File file) throws IOException {
         return DigestUtils.sha1Hex(Files.readAllBytes(file.toPath()));
     }
 
