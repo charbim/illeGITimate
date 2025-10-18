@@ -226,11 +226,13 @@ After spending a solid 2 hours trying to figure out how the hell this code worke
 - Code goes through ALL files & not just the ones staged in the index
 - No code that reads the index
 - basically goes top down, the same issue I had before realizing what the code was actually supposed to do. yippee!!
+- index also goes completely bonkers after tree is done
 
 
 **CJ Updates to Tree**
 - Hopefully write a good readme for the tree class functionality
 - create a function that just..... creates all necessary files using the index at the time when it was called
 - verify if the file is actually staged, aka in the index
+- fix final index (condense, prob referencing miles' code)
 
 lets lock in chat!!!!!
