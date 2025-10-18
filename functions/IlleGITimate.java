@@ -128,8 +128,6 @@ public class IlleGITimate {
         git.updateCommitHistory(commit);
     }
 
-    public
-
     /*
      * Builds the paths to each important file. If someone uses the default
      * constructor, pathname will be empty and these paths will simply point to

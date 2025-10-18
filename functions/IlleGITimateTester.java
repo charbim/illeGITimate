@@ -401,7 +401,8 @@ public class IlleGITimateTester {
             test.stageFile(f);
         }
 
-        // TreeBuilder tb = new TreeBuilder(new File("."), test.getIndex());
+        TreeBuilder tb = new TreeBuilder(new File("."), test.getIndex());
+        tb.addDirectory("testFileCreationForCommit");
 
     }
 

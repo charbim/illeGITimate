@@ -211,3 +211,26 @@ Now that you've read everything above and (hopefully) understand the basics of h
 Hi! I put this at the end so that hopefully you've read everything above so that you know how the abominable code I made works. To run the code, edit ```src.java```. You'll probably be mainly working in the tester class though.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+## Behavioral Bugs
+
+Hi chat this is CJ and I am genuinely so done with this code.
+After spending a solid 2 hours trying to figure out how the hell this code worked I have finally located what exactly u needa plug in to make this work + a few issues
+
+**How Tree Code Works**
+- Create TreeBuilder w/2 arguments, the main repo (new File(".")); and the index.
+- Need to then do .addDirectory() with the wanted directory to blob all folders/files
+
+**Minor Bugs/Flaws**
+- Code goes through ALL files & not just the ones staged in the index
+- No code that reads the index
+- basically goes top down, the same issue I had before realizing what the code was actually supposed to do. yippee!!
+
+
+**CJ Updates to Tree**
+- Hopefully write a good readme for the tree class functionality
+- create a function that just..... creates all necessary files using the index at the time when it was called
+- verify if the file is actually staged, aka in the index
+
+lets lock in chat!!!!!
