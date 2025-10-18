@@ -1,10 +1,16 @@
 package components;
 
 import java.io.File;
+import java.util.HashMap;
+
+import functions.CommitFile;
 
 public class Git {
 
     private File git;
+
+    // Stores all commits.
+    private HashMap<String, CommitFile> commitHistory;
 
     public Git(String pathname) {
         initializePath(pathname);
@@ -35,6 +41,14 @@ public class Git {
 
     public boolean delete() {
         return git.delete();
+    }
+
+    public void updateCommitHistory(CommitFile commit) {
+        commitHistory.put(commit.getHash(), commit);
+    }
+
+    public CommitFile findCommit(String commitHash) {
+        return commitHistory.get(commitHash);
     }
 
 }
