@@ -70,9 +70,9 @@ public class TreeBuilder {
             String name = p.getFileName().toString();
             if (name.equals("git")) return;   // never walk the repo metadata
             if (name.equals(".git")) return;  // (safety if naming differs)
-            if (Files.isDirectory(p)) {
+            if (Files.isDirectory(p) && index.contains(name)) {
                 dirs.add(p);
-            } else if (Files.isRegularFile(p)) {
+            } else if (Files.isRegularFile(p) && index.contains(name)) {
                 files.add(p);
             }
         });
@@ -83,9 +83,9 @@ public class TreeBuilder {
         for (Path f : files) {
             String sha = hashBytes(Files.readAllBytes(f));
             // Keep blob in objects if need be (named by SHA1)
-            writeObjectIfMissing(sha, Files.readAllBytes(f));
+            // writeObjectIfMissing(sha, Files.readAllBytes(f));
             // Stage in index (BLOBS ONLY). Use Miles code
-            index.addFile(f.toFile());
+            // index.addFile(f.toFile());
 
             String baseName = f.getFileName().toString();
             entries.add(Entry.blob(sha, baseName));

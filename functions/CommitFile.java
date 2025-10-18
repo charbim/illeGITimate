@@ -4,11 +4,9 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Date;
 import java.util.Scanner;
-
-import components.Head;
-import components.Objects;
 
 public class CommitFile {
     private String tree;
@@ -18,24 +16,25 @@ public class CommitFile {
     private String message;
     private String hash;
 
-    private Head HEAD;
-    private Objects objects;
+    private IlleGITimate git;
+
 
     // creates a "CommitFile" without actually COMMITTING the file (counter intuitive, ik -- kinda works like the File java class.)
     // User inputs the author and message
-    public CommitFile(String author, String message) {
-        tree = // find a way to get the tree
-        parent = HEAD.getContents();
+    public CommitFile(String author, String message, IlleGITimate git) throws IOException {
+        this.git = git;
+        this.tree = git.createTreeObjectsFromStagedFiles();
+        parent = git.getHEAD().getContents();
         this.author = author;
         date = (new Date()).toString();
         this.message = message;
     }
 
     // like the previous, except it takes the user input.
-    public CommitFile() throws IOException {
+    public CommitFile(String tree) throws IOException {
         String[] userInfo = inputCommitInfo();
-        tree = // find a way to get the tree
-        parent = HEAD.getContents();
+        this.tree = tree;
+        parent = git.getHEAD().getContents();
         this.author = userInfo[0];
         date = (new Date()).toString();
         this.message = userInfo[1];
@@ -44,11 +43,14 @@ public class CommitFile {
     // actually stores the new commitfile in objects
     public void commitFile() throws IOException {
         String contents = buildCommitInfoString();
-        String hash = objects.generateSha1Hex(createInfoFile("commit", contents));
+        String hash = git.getObjects().generateSha1Hex(createInfoFile("commit", contents));
+        new File("commit").delete();
+
         File f = createInfoFile(hash, contents);
-        String commitHash = objects.addFile(f);
-        HEAD.update(commitHash);
-        hash = commitHash;
+        git.getObjects().addFile(f);
+        f.delete();
+
+        git.getHEAD().update(hash);
     }
 
     // inconvience. wow. very annoying. darn you previous people.
@@ -90,7 +92,7 @@ public class CommitFile {
         }
 
         return sb.toString();
-        
+
     }
 
     // Takes user typing inputs and creates a new commit based on that information.

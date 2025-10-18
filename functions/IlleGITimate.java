@@ -2,7 +2,6 @@ package functions;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.HashMap;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -119,14 +118,20 @@ public class IlleGITimate {
         objects.addFile(file);
     }
 
-    /*
-     * Commits a file given an author and a message
-     */
-    public void commitFile(String author, String message) throws IOException {
-        CommitFile commit = new CommitFile(author, message);
-        commit.commitFile();
-        git.updateCommitHistory(commit);
+    // turns all folders in the index into tree objects and then returns the top hash.
+    public String createTreeObjectsFromStagedFiles() throws IOException {
+        TreeBuilder tb = new TreeBuilder(new File("."), index);
+        return tb.addDirectory(".");
     }
+
+    // /*
+    //  * Commits a file given an author and a message
+    //  */
+    // public void commitFile(String author, String message) throws IOException {
+    //     CommitFile commit = new CommitFile(author, message);
+    //     commit.commitFile();
+    //     git.updateCommitHistory(commit);
+    // }
 
     /*
      * Builds the paths to each important file. If someone uses the default
@@ -173,6 +178,9 @@ public class IlleGITimate {
         }
         if (objects.exists()) {
             objects.deleteContents();
+        }
+        if (HEAD.exists()) {
+            HEAD.clear();
         }
     }
 
@@ -225,6 +233,14 @@ public class IlleGITimate {
     public Index getIndex() {
         return index;
     }
+
+    public Head getHEAD(){
+        return HEAD;
+    }
+
+    public Git gitGIT() {
+        return git;
+    } 
 
     /*
      * Only use this if you delete the repository and want to recreate it with the

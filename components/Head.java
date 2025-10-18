@@ -1,7 +1,9 @@
 package components;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -12,6 +14,7 @@ public class Head {
     
     public Head(String pathname) throws IOException {
         initializePath(pathname);
+        contents = "";
     }
     
     // GETTERS
@@ -52,7 +55,26 @@ public class Head {
         this.contents = contents;
     }
 
-    public String getContents() {
+    // public String getContents() {
+    //     if (contents == null) {
+    //         return "";
+    //     }
+    //     return contents;
+    // }
+
+    public void clear() throws IOException {
+        HEAD.delete();
+        HEAD.createNewFile();
+    }
+
+
+    public String getContents() throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader(HEAD));
+        String contents = br.readLine();
+        br.close();
+        if (contents == null) {
+            return "";
+        }
         return contents;
     }
 

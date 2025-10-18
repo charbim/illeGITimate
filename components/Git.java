@@ -14,6 +14,7 @@ public class Git {
 
     public Git(String pathname) {
         initializePath(pathname);
+        commitHistory = new HashMap<>();
     }
 
     // GETTERS

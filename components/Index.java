@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -31,6 +32,7 @@ public class Index {
      * object...
      */
     private HashMap<String, String> storedFiles = new HashMap<String, String>();
+    private HashSet<String> allFilePaths = new HashSet<>();
     private File index;
     private int numberOfEntries;
 
@@ -93,6 +95,7 @@ public class Index {
             String hash = line.substring(0, 40); // apoloigies for the magic number
             String pathname = line.substring(41, line.length());
             storedFiles.put(pathname, hash);
+            hashPaths(pathname);
             numberOfEntries += 1;
         }
 
@@ -104,6 +107,7 @@ public class Index {
      */
     public void addFile(File file) throws IOException {
         storedFiles.put(file.getPath(), generateSha1Hex(file));
+        hashPaths(file.getPath());
         rewrite();
     }
 
@@ -166,4 +170,30 @@ public class Index {
     public boolean containsHash(String pathname, String hash) {
         return storedFiles.get(pathname).equals(hash);
     }
+
+    // is this inefficient?? yes, absolutely. Do I care???? no. no I do not.
+    // basically makes sure all necessary folder paths are recognized so you can stage what is needed. I could make this more efficient but that would require me to rewrite a whole lot of tree functionality which is not my job. sorry miles :(
+    // Hashes all used Files/Folders in "allFilePaths" to be referenced later.
+    public void hashPaths(String pathname) {
+        int nextDir = pathname.lastIndexOf("/");
+        if (nextDir != -1) {
+            String name = pathname.substring(nextDir + 1);
+            if (!allFilePaths.contains(name)) {
+                allFilePaths.add(name);
+            }
+            hashPaths(pathname.substring(0, nextDir));
+        }
+    }
+
+    //checks if the index has the file/folder staged
+    // there was def a better way to do this w/mile's code but bc the tree person didn't really use the hashmap functionality I felt bad deleting miles' stuff (in fear of wrecking the code) & just created my own thing. (adding shas would be too much effort I was not ready to *COMMIT* to -- haha, get my joke?)
+    public boolean contains(String singlePath) {
+        return allFilePaths.contains(singlePath);
+    }
+
+    //ignore this, i needed to test if it was storing stuff in the correct format.
+    public String toString(){
+        return allFilePaths.toString();
+    }
+
 }
